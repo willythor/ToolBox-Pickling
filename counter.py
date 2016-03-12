@@ -1,7 +1,9 @@
 """ A program that stores and updates a counter using a Python pickle file"""
 
 from os.path import exists
+import os
 import sys
+import pickle
 from pickle import dump, load
 
 def update_counter(file_name, reset=False):
@@ -26,13 +28,32 @@ def update_counter(file_name, reset=False):
 	1
 	>>> update_counter('blah.txt')
 	3
-	>>> update_counter('blah2.txt')
+	>>> update_counter('blah2.txt') 
 	2
 	"""
-	pass
+	counter = 1
+	
+	if os.path.exists(file_name) and reset == True:
+		f = open(file_name, 'wb')
+		pickle.dump(1, f)
+		f.close()
+	elif os.path.exists(file_name) and reset == False:
+		counter = pickle.load(open(file_name, 'rb'))
+		counter += 1
+
+		f = open(file_name, 'wb')
+		pickle.dump(counter, f)
+		f.close
+	else:
+		f = open(file_name, 'wb')
+		pickle.dump(1, f)	
+		f.close()
+	return counter
+
 
 if __name__ == '__main__':
 	if len(sys.argv) < 2:
+		#update_counter("blah.txt", False)
 		import doctest
 		doctest.testmod()
 	else:
